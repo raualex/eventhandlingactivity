@@ -9,41 +9,38 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private ConstraintLayout constraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        constraintLayout = findViewById(R.id.constraintLayout);
+        final ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
 
         Button button1 = findViewById(R.id.button1);
         Button button2 = findViewById(R.id.button2);
 
-        // VVV You can just use 'this' for these functions, as well, but this notation
-        // avoids confusion as to what 'this' is referring to! VVV
-        button1.setOnClickListener(MainActivity.this);
-        button2.setOnClickListener(MainActivity.this);
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-
-            case R.id.button1:
-                Log.i(TAG, "Color changed to GREEN");
+        // 'new View.OnClickListener()' does NOT create a new instance of 'View.OnClickListener()'
+        // because 'View.OnClickListener()' is an INTERFACE
+        // So, what it DOES do is create a new object that IMPLEMENTS
+        // the 'View.OnClickListener()' interface
+        assert button1 != null;
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 constraintLayout.setBackgroundColor(Color.GREEN);
-                break;
+            }
+        });
 
-            case R.id.button2:
-                Log.i(TAG, "Color changed to BLUE");
+        assert button2 != null;
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 constraintLayout.setBackgroundColor(Color.BLUE);
-                break;
-        }
+            }
+        });
     }
 }
